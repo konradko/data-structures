@@ -7,13 +7,20 @@ class Overflow(Exception):
 
 
 class Node:
-    data = None
-    link = None
+
+    def __init__(self, link=None, data=None):
+        self.link = link
+        self.data = data
 
 
 class AvailableSpace:
     """ Storage pool based on a linked list"""
-    available = Node(link=Node(link=Node(link=Node(link=Node()))))
+
+    def __init__(self, size):
+        self.available = None
+
+        for x in xrange(size):
+            self.available = Node(link=self.available)
 
     def get_node(self):
         if self.available is None:
@@ -24,6 +31,7 @@ class AvailableSpace:
             return result
 
     def release(self, node):
+        node.data = None
         node.link = self.available
         self.available = node
 
