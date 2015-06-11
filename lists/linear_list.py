@@ -7,16 +7,21 @@ class Overflow(Exception):
 
 
 class SequentialMemory:
-    """ Sequential area of memory based on a linear list """
-    memory = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
-    max_nodes = len(memory)
+    """ Stub for sequential area of memory based on a linear list """
+
+    def __init__(self, size):
+        self.memory = []
+        for x in xrange(size):
+            self.memory.append(None)
+
+        self.max_nodes = len(self.memory)
 
     def set_node(self, address, node):
-        self._list[address - 1] = node
+        self.memory[address - 1] = node
 
     def remove_node(self, address):
-        value = self._list[address - 1]
-        self._list[address - 1] = str(address - 1)
+        value = self.memory[address - 1]
+        self.memory[address - 1] = None
         return value
 
 
