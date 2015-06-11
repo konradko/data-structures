@@ -7,7 +7,7 @@ class Overflow(Exception):
 
 
 class SequentialMemory:
-    """ Sequential area of memory based on linear list """
+    """ Sequential area of memory based on a linear list """
     memory = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
     max_nodes = len(memory)
 

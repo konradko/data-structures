@@ -12,7 +12,7 @@ class Node:
 
 
 class AvailableSpace:
-    """ Storage pool based on with linked list"""
+    """ Storage pool based on a linked list"""
     available = Node(link=Node(link=Node(link=Node(link=Node()))))
 
     def get_node(self):
@@ -101,3 +101,69 @@ class Deque(Queue):
             self.rear = node
 
         return result
+
+
+class CircularList(AvailableSpace):
+    pointer = None
+
+    def left_insert(self, item):
+        node = self.get_node()
+        node.data = item
+        if self.pointer is None:
+            self.pointer = node
+        else:
+            node.link = self.pointer.link
+        self.pointer.link = node
+
+    def right_insert(self, item):
+        self.left_insert(item)
+        self.pointer = self.pointer.link
+
+    def left_delete(self):
+        if self.pointer is None:
+            raise Underflow()
+
+        node = self.pointer.link
+        if self.pointer == node:
+            self.pointer = None
+        else:
+            self.pointer.link = node.link
+
+        result = node.data
+        self.release(node)
+        return result
+
+    def right_delete(self):
+        if self.pointer is None:
+            raise Underflow()
+
+        node = self.pointer.link
+        if self.pointer == node:
+            self.pointer = None
+            result = node.data
+            self.release(node)
+        else:
+            while node.link != self.pointer:
+                node = node.link
+            node.link = None
+            result = self.pointer.data
+            self.release(self.pointer)
+            self.pointer = node
+
+        return result
+
+    def erase(self):
+        if self.pointer is not None:
+            node = self.available
+            self.available = self.pointer.link
+            self.pointer.link = node
+            self.pointer = None
+
+    def concatenate(self, other_circular_list):
+        if other_circular_list.pointer is not None:
+            if self.pointer is not None:
+                node = self.pointer.link
+                self.pointer.link = other_circular_list.pointer.link
+                other_circular_list.pointer.link = node
+            self.pointer = other_circular_list.pointer
+            other_circular_list.pointer = None
